@@ -1,0 +1,35 @@
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+/docker-compose.override.yaml
+/docker-compose.override.yml
+
+
+###> symfony/framework-bundle ###
+
+### for example purpose .env files are added to git repository! just uncomment 
+### the following lines on a real project
+
+#/.env
+#/.env.local
+#/.env.local.php
+#/.env.*.local
+
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> friendsofphp/php-cs-fixer ###
+.php_cs
+.php_cs.cache
+###< friendsofphp/php-cs-fixer ###
+
+.DS_Store

@@ -1,0 +1,50 @@
+version: '3.7'
+
+services:
+  php:
+    image: ${CONTAINER_REGISTRY_BASE}/php
+    build:
+      context: .
+      target: vo_php
+      cache_from:
+        - ${CONTAINER_REGISTRY_BASE}/php
+        - ${CONTAINER_REGISTRY_BASE}/nginx
+    depends_on:
+      - db
+    env_file:
+      - ./.env
+    volumes:
+      - ./:/srv/api:rw,cached
+
+  api:
+    image: ${CONTAINER_REGISTRY_BASE}/nginx
+    build:
+      context: .
+      target: vo_nginx
+      cache_from:
+        - ${CONTAINER_REGISTRY_BASE}/php
+        - ${CONTAINER_REGISTRY_BASE}/nginx
+        - ${CONTAINER_REGISTRY_BASE}/varnish
+    depends_on:
+      - php
+    volumes:
+      - ./public:/srv/api/public:ro
+    ports:
+      - "8080:80"
+
+  db:
+    image: percona:5.7.24
+    environment:
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+    volumes:
+      - db-data:/var/lib/mysql:rw
+      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
+      #- ./docker/db/data:/var/lib/mysql:rw
+    ports:
+      - "5432:5432"
+      
+volumes:
+  db-data: {}
