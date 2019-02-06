@@ -7,6 +7,7 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\Embeddable\GeoCoordinates;
+use App\Entity\Embeddable\PostalAddress;
 
 /**
  * @ApiResource(
@@ -58,7 +59,44 @@ class FoodEstablishment
      * @Assert\Valid
      */
     public $geo;
-
+    
+    /**
+     * @var PostalAddress Physical address of the item.
+     * @ORM\Embedded(class=PostalAddress::class, columnPrefix="address_")
+     * @ApiProperty(
+     *   iri="https://schema.org/PostalAddress",
+     *   attributes = {
+     *     "swagger_context"={
+     *       "type"="object",
+     *       "properties"={
+     *         "addressCountry"={
+     *           "type"="string",
+     *           "description"="The country. You can also provide the two-letter ISO 3166-1 alpha-2 country code.",
+     *           "example"="USA"
+     *         },
+     *         "addressLocality"={
+     *           "type"="string",
+     *           "description"="The locality.",
+     *           "example"="Mountain View"
+     *         },
+     *         "postalCode"={
+     *           "type"="string",
+     *           "description"="The postal code.",
+     *           "example"="94043"
+     *         },
+     *         "streetAddress"={
+     *           "type"="string",
+     *           "description"="The street address.",
+     *           "example"="1600 Amphitheatre Pkwy"
+     *         },
+     *       }
+     *     }
+     *   }  
+     * )
+     * @Assert\Valid
+     */
+    public $address;
+    
     public function getId(): ?int
     {
         return $this->id;
