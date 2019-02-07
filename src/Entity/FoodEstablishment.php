@@ -7,11 +7,18 @@ use ApiPlatform\Core\Annotation\ApiProperty;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\Embeddable\GeoCoordinates;
-use App\Entity\Embeddable\PostalAddress;
+use App\Entity\PostalAddress;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
- *   iri="http://schema.org/FoodEstablishment"
+ *   iri="http://schema.org/FoodEstablishment",
+ *   normalizationContext={"groups"={
+ *      "food_establishment:read"
+ *   }},
+ *   denormalizationContext={"groups"={
+ *      "food_establishment:write"
+ *   }},
  * )
  * @ORM\Entity(repositoryClass="App\Repository\FoodEstablishmentRepository")
  */
@@ -29,6 +36,7 @@ class FoodEstablishment
      * @ORM\Column(type="string", length=255)
      * @ApiProperty(iri="http://schema.org/name")
      * @Assert\NotBlank
+     * @Groups({"food_establishment:write", "food_establishment:read"})
      */
     public $name;
 
@@ -57,49 +65,35 @@ class FoodEstablishment
      *   }  
      * )
      * @Assert\Valid
+     * @Groups({"food_establishment:write", "food_establishment:read"})
      */
     public $geo;
-    
+
     /**
-     * @var PostalAddress Physical address of the item.
-     * @ORM\Embedded(class=PostalAddress::class, columnPrefix="address_")
-     * @ApiProperty(
-     *   iri="https://schema.org/PostalAddress",
-     *   attributes = {
-     *     "swagger_context"={
-     *       "type"="object",
-     *       "properties"={
-     *         "addressCountry"={
-     *           "type"="string",
-     *           "description"="The country. You can also provide the two-letter ISO 3166-1 alpha-2 country code.",
-     *           "example"="USA"
-     *         },
-     *         "addressLocality"={
-     *           "type"="string",
-     *           "description"="The locality.",
-     *           "example"="Mountain View"
-     *         },
-     *         "postalCode"={
-     *           "type"="string",
-     *           "description"="The postal code.",
-     *           "example"="94043"
-     *         },
-     *         "streetAddress"={
-     *           "type"="string",
-     *           "description"="The street address.",
-     *           "example"="1600 Amphitheatre Pkwy"
-     *         },
-     *       }
-     *     }
-     *   }  
-     * )
+     * @var PostalAddress The mailing address.
+     * @ORM\OneToOne(targetEntity="App\Entity\PostalAddress", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @ORM\JoinColumn(nullable=false)   
+     * @ApiProperty(iri="http://schema.org/PostalAddress")
      * @Assert\Valid
+     * @Groups({"food_establishment:write", "food_establishment:read"})
      */
-    public $address;
+    private $address;
     
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getAddress(): ?PostalAddress
+    {
+        return $this->address;
+    }
+
+    public function setAddress(PostalAddress $address): self
+    {
+        $this->address = $address;
+
+        return $this;
     }
 
 }

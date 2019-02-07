@@ -4,6 +4,7 @@ namespace App\Entity\Embeddable;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Embeddable
@@ -17,6 +18,7 @@ class GeoCoordinates
      * @Assert\GreaterThanOrEqual(-90)
      * @Assert\LessThanOrEqual(90)
      * @ORM\Column(type="decimal", precision=10, scale=8, nullable=false)
+     * @Groups({"food_establishment:write", "food_establishment:read"})
      */
     public $latitude;
 
@@ -27,6 +29,7 @@ class GeoCoordinates
      * @Assert\GreaterThanOrEqual(-180)
      * @Assert\LessThanOrEqual(180)
      * @ORM\Column(type="decimal", precision=11, scale=8, nullable=false)
+     * @Groups({"food_establishment:write", "food_establishment:read"})
      */
     public $longitude;
     
