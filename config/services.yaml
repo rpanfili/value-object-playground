@@ -25,3 +25,14 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    
+
+    'App\Serializer\Normalizer\FoodEstablishmentNormalizer':
+        decorates: 'api_platform.serializer.normalizer.item'
+        arguments: 
+            $decorated: '@App\Serializer\Normalizer\FoodEstablishmentNormalizer.inner'        
+    
+    'App\Serializer\Normalizer\PostalAddressNormalizer':
+        tags:
+            - { name: 'serializer.normalizer', priority: 100}
+            
