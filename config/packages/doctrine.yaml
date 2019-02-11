@@ -15,7 +15,9 @@ doctrine:
             charset: utf8mb4
             collate: utf8mb4_unicode_ci
 
-        url: '%env(resolve:DATABASE_URL)%'
+        url: '%env(resolve:DATABASE_URL)%'        
+        types:
+            opening_hours: App\Doctrine\DBAL\Types\OpeningHoursType
     orm:
         auto_generate_proxy_classes: true
         naming_strategy: doctrine.orm.naming_strategy.underscore
