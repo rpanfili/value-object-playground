@@ -33,3 +33,8 @@
 ###< friendsofphp/php-cs-fixer ###
 
 .DS_Store
+
+###> symfony/phpunit-bridge ###
+.phpunit
+/phpunit.xml
+###< symfony/phpunit-bridge ###
