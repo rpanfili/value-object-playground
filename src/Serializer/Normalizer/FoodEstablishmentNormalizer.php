@@ -11,16 +11,12 @@ use App\Entity\FoodEstablishment;
 
 final class FoodEstablishmentNormalizer implements DenormalizerInterface, SerializerAwareInterface, CacheableSupportsMethodInterface
 {
-    private 
-      /** @var DenormalizerInterface */
-      $decorated,
-      /** @var IriConverterInterface */
-      $iriConverter;      
+    private $decorated;
+    private $iriConverter;
       
     public function __construct(DenormalizerInterface $decorated, IriConverterInterface $iriConverter)
     {
-        if (!$decorated instanceof DenormalizerInterface) 
-        {
+        if (!$decorated instanceof DenormalizerInterface) {
             throw new \InvalidArgumentException(sprintf('The decorated normalizer must implement the %s.', DenormalizerInterface::class));
         }
         
@@ -33,7 +29,7 @@ final class FoodEstablishmentNormalizer implements DenormalizerInterface, Serial
      */
     public function supportsDenormalization($data, $type, $format = null)
     {
-      return $this->decorated->supportsDenormalization($data, $type, $format);
+        return $this->decorated->supportsDenormalization($data, $type, $format);
     }
     
     /**
@@ -41,13 +37,13 @@ final class FoodEstablishmentNormalizer implements DenormalizerInterface, Serial
      */
     public function denormalize($data, $class, $format = null, array $context = [])
     {
-        if(
-            $class === FoodEstablishment::class && 
-            ($addressData = &$data['address'] ?? null) && 
+        if (
+            $class === FoodEstablishment::class &&
+            ($addressData = &$data['address'] ?? null) &&
             ($persisted = $context[$this->decorated::OBJECT_TO_POPULATE] ?? null) &&
             ($currentAddress = $persisted->getAddress())
-        )
-        {
+        ) {
+            dump($data);
             $addressData['id'] = $this->iriConverter->getIriFromItem($currentAddress);
         }
         
@@ -59,11 +55,10 @@ final class FoodEstablishmentNormalizer implements DenormalizerInterface, Serial
      */
     public function setSerializer(SerializerInterface $serializer)
     {
-        if($this->decorated instanceof SerializerAwareInterface) 
-        {
+        if ($this->decorated instanceof SerializerAwareInterface) {
             $this->decorated->setSerializer($serializer);
         }
-    }    
+    }
     
     /**
      * {@inheritdoc}

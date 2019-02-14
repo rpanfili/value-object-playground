@@ -22,14 +22,14 @@ class OpeningHoursUtilTest extends TestCase
      */
     public function testEmpty()
     {
-        $this->helper->parse('');
+        $this->helper->toArray('');
     }
 
     public function testParseSingleDay()
     {
         $this->assertEquals(
             [1 => [[0, 120]]],
-            array_filter($this->helper->parse('Mo 00:00-02:00'))
+            array_filter($this->helper->toArray('Mo 00:00-02:00'))
         );
     }
 
@@ -37,7 +37,7 @@ class OpeningHoursUtilTest extends TestCase
     {
         $this->assertEquals(
             [1 => [[0, 120]]],
-            array_filter($this->helper->parse('Mo 00:00 - 02:00   '))
+            array_filter($this->helper->toArray('Mo 00:00 - 02:00   '))
         );
     }
 
@@ -48,7 +48,7 @@ class OpeningHoursUtilTest extends TestCase
                 1 => [[0, 120]],
                 2 => [[0, 120]],
             ],
-            array_filter($this->helper->parse('Mo,Tu 00:00-02:00'))
+            array_filter($this->helper->toArray('Mo,Tu 00:00-02:00'))
         );
     }
 
@@ -57,7 +57,7 @@ class OpeningHoursUtilTest extends TestCase
      */
     public function testInvalidMultipleSameDay()
     {
-        $this->helper->parse('Mo,Mo 00:00-02:00');
+        $this->helper->toArray('Mo,Mo 00:00-02:00');
     }
 
     /**
@@ -65,7 +65,7 @@ class OpeningHoursUtilTest extends TestCase
      */
     public function testInvalidTimeRange()
     {
-        $this->helper->parse('Mo 09:00-02:00');
+        $this->helper->toArray('Mo 09:00-02:00');
     }
 
 
@@ -77,7 +77,7 @@ class OpeningHoursUtilTest extends TestCase
                 2 => [[0, 120]],
                 3 => [[0, 120]],
             ],
-            array_filter($this->helper->parse('Mo-We 00:00-02:00'))
+            array_filter($this->helper->toArray('Mo-We 00:00-02:00'))
         );
     }
 
@@ -86,7 +86,7 @@ class OpeningHoursUtilTest extends TestCase
      */
     public function testInvalidRange()
     {
-        $this->helper->parse('Mo-Mo 00:00-02:00');
+        $this->helper->toArray('Mo-Mo 00:00-02:00');
     }
 
     public function testDayRangeOverflow()
@@ -98,7 +98,7 @@ class OpeningHoursUtilTest extends TestCase
                 5 => [[0, 120]],
                 6 => [[0, 120]],
             ],
-            array_filter($this->helper->parse('Fr-Mo 00:00-02:00'))
+            array_filter($this->helper->toArray('Fr-Mo 00:00-02:00'))
         );
     }
 
@@ -110,7 +110,7 @@ class OpeningHoursUtilTest extends TestCase
                 3 => [[0, 120]],
                 4 => [[0, 120]],
             ],
-            array_filter($this->helper->parse('Mo,We-Th 00:00-02:00'))
+            array_filter($this->helper->toArray('Mo,We-Th 00:00-02:00'))
         );
     }
 
@@ -122,7 +122,7 @@ class OpeningHoursUtilTest extends TestCase
                 2 => [[0, 60*24]],
                 3 => [[0, 60*24]],
             ],
-            array_filter($this->helper->parse('Mo-We'))
+            array_filter($this->helper->toArray('Mo-We'))
         );
     }
 
@@ -135,7 +135,7 @@ class OpeningHoursUtilTest extends TestCase
                 6 => [[10*60, 22*60]],
                 0 => [[10*60, 21*60]],
             ],
-            array_filter($this->helper->parse([
+            array_filter($this->helper->toArray([
                 "Mo-Tu 10:00-19:00",
                 "Sa 10:00-22:00",
                 "Su 10:00-21:00"
@@ -150,7 +150,7 @@ class OpeningHoursUtilTest extends TestCase
                 1 => [[10*60, 12*60],[15*60,22*60]],
                 2 => [[10*60, 12*60]],
             ],
-            array_filter($this->helper->parse([
+            array_filter($this->helper->toArray([
                 "Mo-Tu 10:00-12:00",
                 "Mo 15:00-22:00",
                 "Tu 10:00-11:00"
@@ -165,7 +165,7 @@ class OpeningHoursUtilTest extends TestCase
                 1 => [[10*60, 22*60]],
                 2 => [[10*60, 12*60]],
             ],
-            array_filter($this->helper->parse([
+            array_filter($this->helper->toArray([
                 "Mo-Tu 10:00-12:00",
                 "Mo 12:00-22:00",
                 "Tu 10:00-12:00"

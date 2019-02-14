@@ -9,6 +9,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 use App\Entity\Embeddable\GeoCoordinates;
 use App\Entity\PostalAddress;
 use Symfony\Component\Serializer\Annotation\Groups;
+use App\Validator\Constraints as AppAssert;
+use App\Entity\ValueObject\OpeningHours;
 
 /**
  * @ApiResource(
@@ -78,6 +80,14 @@ class FoodEstablishment
      * @Groups({"food_establishment:write", "food_establishment:read"})
      */
     private $address;
+    
+    /**
+     * @ORM\Column(type="opening_hours", nullable=true)
+     * @Groups({"food_establishment:write", "food_establishment:read"})
+     * @AppAssert\OpeningHours
+     * @var OpeningHours
+     */
+    public $openingHours;
     
     public function getId(): ?int
     {
