@@ -73,6 +73,8 @@ final class OpeningHoursUtil
                 OpeningHoursParseException::INVALID_FORMAT
             );
         }
+        
+        $nextMidnight = 24*60;
 
         $start = isset($matches['starttime']) ?
             $this->convertTimeToMinutes($matches['starttime']) :
@@ -82,14 +84,7 @@ final class OpeningHoursUtil
         $end = isset($matches['endtime']) ?
             $this->convertTimeToMinutes($matches['endtime']) :
             //otherwise it's intended all-day
-            (24*60);
-
-        if ($start >= $end) {
-            throw new OpeningHoursParseException(
-                "Invalid interval delimiters: it cannot begin after its conclusion",
-                OpeningHoursParseException::INVALID_TIME_INTERVAL_LIMITS
-            );
-        }
+            $nextMidnight;
 
         $days = $this->dayStringToDayList($matches['days']);
         
@@ -102,7 +97,16 @@ final class OpeningHoursUtil
         
         $daysPosition = array_flip($this->weekdays);
         foreach ($days as $day) {
-            $hours[$daysPosition[$day]] = [$start, $end];
+            /*
+             * late night hours
+             * @see https://developers.google.com/search/docs/data-types/local-business#business_hours
+             */
+            if ($end < $start) {
+                $hours[($position = $daysPosition[$day])] = [$start, $nextMidnight];
+                $hours[($position + 1) % count($this->weekdays)] = [0, $end];
+            } else {
+                $hours[$daysPosition[$day]] = [$start, $end];
+            }
         }
 
         return $hours;

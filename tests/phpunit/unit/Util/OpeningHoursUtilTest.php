@@ -8,9 +8,8 @@ use PHPUnit\Framework\TestCase;
 class OpeningHoursUtilTest extends TestCase
 {
 
-    protected
-        /** @var OpeningHoursUtil */
-        $helper;
+    /** @var OpeningHoursUtil */
+    protected $helper;
 
     public function setUp()
     {
@@ -59,15 +58,6 @@ class OpeningHoursUtilTest extends TestCase
     {
         $this->helper->toArray('Mo,Mo 00:00-02:00');
     }
-
-    /**
-     * @expectedException \App\Util\Exception\OpeningHoursParseException
-     */
-    public function testInvalidTimeRange()
-    {
-        $this->helper->toArray('Mo 09:00-02:00');
-    }
-
 
     public function testDayRange()
     {
@@ -172,5 +162,17 @@ class OpeningHoursUtilTest extends TestCase
             ]))
         );
     }
-
+    
+    public function testLateNightHours()
+    {
+        $this->assertEquals(
+            [
+              6 => [[15*60, 24*60]],
+              0 => [[0, 2*60]]
+            ],
+            array_filter($this->helper->toArray([
+                "Sa 15:00-02:00"
+            ]))
+        );
+    }
 }

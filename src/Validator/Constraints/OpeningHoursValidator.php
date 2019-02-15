@@ -39,9 +39,6 @@ final class OpeningHoursValidator extends ConstraintValidator
             /** @var OpeningHoursConstraint $constraint */
             $code = $constraint::INVALID_FORMAT;
             switch ($e->getCode()) {
-                case $e::INVALID_TIME_INTERVAL_LIMITS:
-                    $code = $constraint::INVALID_TIME_INTERVAL_LIMITS;
-                    break;
                 case $e::INVALID_INTERVAL_SAME_DAY:
                     $code = $constraint::INVALID_INTERVAL_SAME_DAY;
                     break;
