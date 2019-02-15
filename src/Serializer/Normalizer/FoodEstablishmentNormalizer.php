@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Serializer\Normalizer;
 
@@ -43,7 +45,6 @@ final class FoodEstablishmentNormalizer implements DenormalizerInterface, Serial
             ($persisted = $context[$this->decorated::OBJECT_TO_POPULATE] ?? null) &&
             ($currentAddress = $persisted->getAddress())
         ) {
-            dump($data);
             $addressData['id'] = $this->iriConverter->getIriFromItem($currentAddress);
         }
         

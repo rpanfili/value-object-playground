@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Doctrine\DBAL\Types;
 
@@ -38,9 +40,6 @@ class OpeningHoursType extends JsonType
         if (!$value instanceof OpeningHours) {
             throw new ConversionException('Expected '. OpeningHours::class .', got ' . gettype($value));
         }
-
-        dump($value->getIntervals());
-        die(__METHOD__);
 
         return parent::convertToDatabaseValue($value->getIntervals(), $platform);
     }
