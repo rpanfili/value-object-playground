@@ -176,6 +176,17 @@ class OpeningHoursUtilTest extends TestCase
         );
     }
     
+    public function testMidnightLimit()
+    {
+        $this->assertEquals(
+            [
+              6 => [[15*60, 24*60]],
+            ],
+            array_filter($this->helper->toArray([
+                "Sa 15:00-00:00"
+            ]))
+        );
+    }
     
     public function testClosedAllDay()
     {

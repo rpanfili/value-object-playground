@@ -111,7 +111,9 @@ final class OpeningHoursUtil
              */
             if ($end < $start) {
                 $hours[($position = $daysPosition[$day])] = [$start, $nextMidnight];
-                $hours[($position + 1) % count($this->weekdays)] = [0, $end];
+                if ($end > 0) {
+                    $hours[($position + 1) % count($this->weekdays)] = [0, $end];
+                }
             } else {
                 $hours[$daysPosition[$day]] = [$start, $end];
             }
