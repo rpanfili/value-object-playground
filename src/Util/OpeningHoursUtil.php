@@ -85,6 +85,14 @@ final class OpeningHoursUtil
             $this->convertTimeToMinutes($matches['endtime']) :
             //otherwise it's intended all-day
             $nextMidnight;
+            
+        /*
+         * Location is closed all-day
+         * @see ALL-DAY HOURS https://developers.google.com/search/docs/data-types/local-business#business_hours
+         */
+        if ($start === $end) {
+            return $hours;
+        }
 
         $days = $this->dayStringToDayList($matches['days']);
         
@@ -99,7 +107,7 @@ final class OpeningHoursUtil
         foreach ($days as $day) {
             /*
              * late night hours
-             * @see https://developers.google.com/search/docs/data-types/local-business#business_hours
+             * @see LATE NIGHT HOURS https://developers.google.com/search/docs/data-types/local-business#business_hours
              */
             if ($end < $start) {
                 $hours[($position = $daysPosition[$day])] = [$start, $nextMidnight];

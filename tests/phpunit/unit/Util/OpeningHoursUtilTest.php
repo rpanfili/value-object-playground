@@ -175,4 +175,14 @@ class OpeningHoursUtilTest extends TestCase
             ]))
         );
     }
+    
+    
+    public function testClosedAllDay()
+    {
+        $this->assertEmpty(
+            array_filter($this->helper->toArray([
+              "Su 00:00-00:00"
+            ]))
+        );
+    }
 }
