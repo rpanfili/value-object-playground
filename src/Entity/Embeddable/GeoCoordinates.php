@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\Entity\Embeddable;
 
@@ -18,7 +20,7 @@ class GeoCoordinates
      * @Assert\LessThanOrEqual(90)
      * @ORM\Column(type="decimal", precision=10, scale=8, nullable=false)
      */
-    public $latitude;
+    private $latitude;
 
     /**
      * @var float The longitude of a location
@@ -28,6 +30,25 @@ class GeoCoordinates
      * @Assert\LessThanOrEqual(180)
      * @ORM\Column(type="decimal", precision=11, scale=8, nullable=false)
      */
-    public $longitude;
+    private $longitude;
     
+    /**
+     * @param string $latitude  The latitude of a location
+     * @param string $longitude The longitude of a location
+     */
+    public function __construct(string $latitude, string $longitude)
+    {
+        $this->latitude = $latitude;
+        $this->longitude = $longitude;
+    }
+    
+    public function getLatitude(): string
+    {
+        return $this->latitude;
+    }
+    
+    public function getLongitude(): string
+    {
+        return $this->longitude;
+    }
 }
